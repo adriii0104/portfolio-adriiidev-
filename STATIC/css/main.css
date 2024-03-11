@@ -1,0 +1,27 @@
+* {
+    font-family: "Rubik", sans-serif;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+}
+
+.text-api{
+    font-size: 15px;
+}
+.navbar {
+    padding: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.349); /* Línea que separa el navbar del contenido */
+    margin-bottom: 300px !important;
+  }
+
+  /* Estilo para los enlaces dentro del navbar */
+  .navbar-dark .navbar-nav .nav-link {
+    color: black; /* Letras negras */
+  }
+
+
+.principal{
+    font-size: 79px;
+}
