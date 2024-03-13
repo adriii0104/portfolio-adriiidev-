@@ -46,7 +46,7 @@ class SHOWFILES:
             return False, 'Ha ocurrido un error inesperado'
         
     @staticmethod
-    def create_file(endpoint:str, method:str, auth:bool) -> bool:
+    def create_file(endpoint:str, method:str, auth:bool, requests:str) -> bool:
         
         if method not in ['POST', 'PUT', 'DELETE']:
             print('El método no es permitido')
@@ -60,16 +60,10 @@ class SHOWFILES:
                 else:
                     #aqui se supone que debo de agregar el endpoint con las especificaciones del usuario.
                     if data[i].find('----end----') != -1:
-                        print(data[i - 1])
                         
-                        data[i - 3]= f'''
-@app.route("/api/{endpoint}", methods=["{method}"])
-def {endpoint}():
-    try:
-        pass
-    except Exception as e:
-        return redirect(url_for('error'))
-        \n\n\n\n\n\n\n'''
+                        endpoint_create = '/api/'+endpoint
+                        
+                        data[i - 3] = files_up(endpoint_create, endpoint, method) if requests == 'up&down' else '\n'
                         
                         with open('app.py', 'w') as file_path:
                             file_path.writelines(data)

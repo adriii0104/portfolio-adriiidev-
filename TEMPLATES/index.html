@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+	{% block head %}
     <title>Adriel - Backend</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -21,11 +22,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/flaticon.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/icomoon.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	{% endblock %}
   </head>
+
   <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-	  
-	  
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light site-navbar-target" id="ftco-navbar">
+
+	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light site-navbar-target" id="ftco-navbar">
 	    <div class="container">
 	      <a class="navbar-brand" href="index.html">Adriel</a>
 	      <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,8 +36,8 @@
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav nav ml-auto">
-	          <li class="nav-item"><a href="#home-section" class="nav-link"><span>Inicio</span></a></li>
-	          <li class="nav-item"><a href="#about-section" class="nav-link"><span>Consultar Api</span></a></li>
+	          <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link"><span>Inicio</span></a></li>
+	          <li class="nav-item"><a href="{{ url_for('single') }}" class="nav-link"><span>Consultar Api</span></a></li>
 	          <li class="nav-item"><a href="#resume-section" class="nav-link"><span>Crear Api</span></a></li>
 	          <li class="nav-item"><a href="#services-section" class="nav-link"><span>Resumen</span></a></li>
 	          <li class="nav-item"><a href="#contact-section" class="nav-link"><span>Contacto</span></a></li>
@@ -43,13 +45,15 @@
 	      </div>
 	    </div>
 	  </nav>
+	  {% block body %}
+	
 	  <section id="home-section" class="hero">
 		  <div class="home-slider  owl-carousel">
 	      <div class="slider-item ">
 	      	<div class="overlay"></div>
 	        <div class="container">
 	          <div class="row d-md-flex no-gutters slider-text align-items-end justify-content-end" data-scrollax-parent="true">
-	          	<div class="one-third js-fullheight order-md-last img" style="background-image:url(images/bg_1.png);">
+	          	<div class="one-third js-fullheight order-md-last img" style="background-size: 40%; background-image:URL();">
 	          		<div class="overlay"></div>
 	          	</div>
 		          <div class="one-forth d-flex  align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
@@ -327,7 +331,7 @@
         </div>
     		<div class="row">
     			<div class="col-md-4">
-    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(images/project-4.jpg);">
+    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: URL({{ url_for('static', filename='FILES/project-4.jpg') }});">
     					<div class="overlay"></div>
 	    				<div class="text text-center p-4">
 	    					<h3><a href="#">G&M Konconete SRL</a></h3>
@@ -336,7 +340,7 @@
     				</div>
   				</div>
   				<div class="col-md-8">
-    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(images/project-5.jpg);">
+    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: URL({{ url_for('static', filename='FILES/project-5.jpg') }});">
     					<div class="overlay"></div>
 	    				<div class="text text-center p-4">
 	    					<h3><a href="#">Bancas Sol & Luz</a></h3>
@@ -346,7 +350,7 @@
   				</div>
 
     			<div class="col-md-8">
-    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(images/project-1.jpg);">
+    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: URL({{ url_for('static', filename='FILES/project-1.jpg') }});">
     					<div class="overlay"></div>
 	    				<div class="text text-center p-4">
 	    					<h3><a href="#">Branding &amp; Illustration Design</a></h3>
@@ -354,7 +358,7 @@
 	    				</div>
     				</div>
 
-    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(images/project-6.jpg);">
+    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: URL({{ url_for('static', filename='FILES/project-6.jpg') }});">
     					<div class="overlay"></div>
 	    				<div class="text text-center p-4">
 	    					<h3><a href="#">Branding &amp; Illustration Design</a></h3>
@@ -365,7 +369,7 @@
     			<div class="col-md-4">
     				<div class="row">
     					<div class="col-md-12">
-		    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(images/project-2.jpg);">
+		    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: URL({{ url_for('static', filename='FILES/project-2.jpg') }});">
 		    					<div class="overlay"></div>
 			    				<div class="text text-center p-4">
 			    					<h3><a href="#">Branding &amp; Illustration Design</a></h3>
@@ -374,7 +378,7 @@
 		    				</div>
 	    				</div>
 	    				<div class="col-md-12">
-		    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(images/project-3.jpg);">
+		    				<div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: URL({{ url_for('static', filename='FILES/project-3.jpg') }});">
 		    					<div class="overlay"></div>
 			    				<div class="text text-center p-4">
 			    					<h3><a href="#">Branding &amp; Illustration Design</a></h3>
@@ -401,7 +405,7 @@
         <div class="row d-flex">
           <div class="col-md-4 d-flex ftco-animate">
           	<div class="blog-entry justify-content-end">
-              <a href="single.html" class="block-20" style="background-image: url('images/image_1.jpg');">
+              <a href="single.html" class="block-20" style="background-image: URL({{ url_for('static', filename='FILES/image_1.jpg') }});">
               </a>
               <div class="text mt-3 float-right d-block">
               	<div class="d-flex align-items-center mb-3 meta">
@@ -418,7 +422,7 @@
           </div>
           <div class="col-md-4 d-flex ftco-animate">
           	<div class="blog-entry justify-content-end">
-              <a href="single.html" class="block-20" style="background-image: url('images/image_2.jpg');">
+              <a href="single.html" class="block-20" style="background-image: URL({{ url_for('static', filename='FILES/image_2.jpg') }});">
               </a>
               <div class="text mt-3 float-right d-block">
               	<div class="d-flex align-items-center mb-3 meta">
@@ -435,7 +439,7 @@
           </div>
           <div class="col-md-4 d-flex ftco-animate">
           	<div class="blog-entry">
-              <a href="single.html" class="block-20" style="background-image: url('images/image_3.jpg');">
+              <a href="single.html" class="block-20" style="background-image: URL({{ url_for('static', filename='FILES/image_3.jpg') }});">
               </a>
               <div class="text mt-3 float-right d-block">
               	<div class="d-flex align-items-center mb-3 meta">
@@ -493,7 +497,7 @@
       </div>
     </section>
 
-    <section class="ftco-section ftco-hireme img margin-top" style="background-image: url(images/bg_1.jpg)">
+    <section class="ftco-section ftco-hireme img margin-top" style="background-image: URL({{ url_for('static', filename='FILES/bg_1.jpg') }});">
 			<div class="container">
 				<div class="row justify-content-center">
 					<div class="col-md-7 ftco-animate text-center">
@@ -555,7 +559,7 @@
         </div>
 
           <div class="col-md-6 d-flex">
-          	<div class="img" style="background-image: url(images/about.jpg);"></div>
+          	<div class="img" style="background-image: URL({{ url_for('static', filename='FILES/about.jpg') }});"></div>
           </div>
         </div>
       </div>
@@ -645,4 +649,5 @@
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     
   </body>
+  {% endblock %}
 </html>
