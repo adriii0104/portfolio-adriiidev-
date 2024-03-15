@@ -2,11 +2,16 @@ from flask import *
 from SITE.settings import *
 from SITE.APIS.verapis import *
 import time
+from SITE.MESSAGES.sendmail import *
+from SITE.MESSAGES.Codes import *
+from SITE.MESSAGES.auth import *
+
 
 
 app = Flask(__name__)
+app.secret_key= 'cogiteunairecomoquetehicientenienteslfmad;lgnasdklfn'
 last_request = {}
-
+verify_users = {}
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -28,27 +33,56 @@ def index():
 @app.route('/single', methods=['GET', 'POST'])
 def single():
     try:
+        # aqui obtenemos la dirección IP del usuario para hacer algunas validaciones.
         ip=request.remote_addr
+        
+        
         if last_request.get(ip) == None:
             last_request[ip] = 0
         if request.method == 'POST':
-            if last_request.get(ip) > 2:
+            if last_request.get(ip) > 4:
                 return redirect(url_for(request.endpoint))
-            last_request[ip] +1
-            endpoint = request.form.get('endpoint')
-            method = request.form.get('method')
-            requests = request.form.get('request')
-            token = request.form.get('token')
+            
+            if request.form.get('email'):
+                email = request.form.get('email')
+                code = GeneradorDeCodigos().intcode()
+                
+                response = authuser(email, code)
+                
+                if response:
+                    last_request[ip] + 1
+                
+                    MAIL().enviar_correo(email, 'Código de verificación', f'Su código de verificación es: {code}')
+                    
+                    session['email'] = email
+                    
 
-            create = SHOWFILES.create_file(endpoint, method, token, requests)
-            return redirect(url_for(request.endpoint))
+                    return redirect(url_for(request.endpoint))
+                else:
+                    return redirect(url_for('internal_server_error'))
+            
+            codigo = request.form.get('codigo')
+            
+            if codigo:  
+                last_request[ip] +1
+                endpoint = request.form.get('endpoint')
+                method = request.form.get('method')
+                requests = request.form.get('request')
+                token = request.form.get('token')
+                create = SHOWFILES.create_file(endpoint, method, token, requests)
+                return redirect(url_for(request.endpoint))
+            else:
+                return redirect(url_for(request.endpoint), flash('Código incorrecto'))
         else:
-            return render_template('single.html')
+            return render_template('single.html', access=False if 'email' not in session else True, code=False if 'email' not in session else True)
     except Exception as e:
-        return redirect(url_for('internal_server_error'))
+        print('error',e)
 
 
-
+@app.route('/clearsession', methods=['GET'])
+def closesession():
+    session.clear()
+    return redirect(url_for('single'))  # Corregido el uso de url_for
 
 @app.errorhandler(500)
 def internal_server_error(error):
@@ -63,207 +97,6 @@ def internal_server_error(error):
 
 
 
-
-
-
-
-
-
-@app.route("/api/datos", methods=['POST'])
-def datos():
-    try:
-        # Verificar si la solicitud es POST
-        if request.method == 'POST':
-            # Obtener el archivo enviado en la solicitud
-            file = request.files['file']
-            filename = file.filename
-            # Verificar si se ha enviado un archivo
-            if filename != '':
-                # Verificar si el archivo ya existe en la carpeta de archivos
-                results = SHOWFILES.upfiles(filename)
-                if results[0]:
-                    # Guardar el archivo en la carpeta de archivos si no existe
-                    file.save(os.path.join(RTFLS, filename))
-                    return jsonify(results[1])  # Devolver resultado exitoso
-                else:
-                    # Devolver un mensaje de error si el archivo ya existe
-                    return jsonify(results[1])
-            else:
-                # Devolver un mensaje si no se ha subido ningun archivo
-                return jsonify('No se ha subido ningun archivo')
-    except Exception as e:
-        # Devolver un mensaje si ocurre un error inesperado
-        return jsonify('Ha ocurrido un error inesperado')
-
-
-
-
-
-
-
-
-
-@app.route("/api/datose", methods=['POST'])
-def datose():
-    try:
-        # Verificar si la solicitud es POST
-        if request.method == 'POST':
-            # Obtener el archivo enviado en la solicitud
-            file = request.files['file']
-            filename = file.filename
-            # Verificar si se ha enviado un archivo
-            if filename != '':
-                # Verificar si el archivo ya existe en la carpeta de archivos
-                results = SHOWFILES.upfiles(filename)
-                if results[0]:
-                    # Guardar el archivo en la carpeta de archivos si no existe
-                    file.save(os.path.join(RTFLS, filename))
-                    return jsonify(results[1])  # Devolver resultado exitoso
-                else:
-                    # Devolver un mensaje de error si el archivo ya existe
-                    return jsonify(results[1])
-            else:
-                # Devolver un mensaje si no se ha subido ningun archivo
-                return jsonify('No se ha subido ningun archivo')
-    except Exception as e:
-        # Devolver un mensaje si ocurre un error inesperado
-        return jsonify('Ha ocurrido un error inesperado')
-
-
-
-
-
-
-
-
-
-@app.route("/api/datoselddll", methods=['POST'])
-def datoselddll():
-    try:
-        # Verificar si la solicitud es POST
-        if request.method == 'POST':
-            # Obtener el archivo enviado en la solicitud
-            file = request.files['file']
-            filename = file.filename
-            # Verificar si se ha enviado un archivo
-            if filename != '':
-                # Verificar si el archivo ya existe en la carpeta de archivos
-                results = SHOWFILES.upfiles(filename)
-                if results[0]:
-                    # Guardar el archivo en la carpeta de archivos si no existe
-                    file.save(os.path.join(RTFLS, filename))
-                    return jsonify(results[1])  # Devolver resultado exitoso
-                else:
-                    # Devolver un mensaje de error si el archivo ya existe
-                    return jsonify(results[1])
-            else:
-                # Devolver un mensaje si no se ha subido ningun archivo
-                return jsonify('No se ha subido ningun archivo')
-    except Exception as e:
-        # Devolver un mensaje si ocurre un error inesperado
-        return jsonify('Ha ocurrido un error inesperado')
-
-
-
-
-
-
-
-
-
-@app.route("/api/datoseldd", methods=['POST'])
-def datoseldd():
-    try:
-        # Verificar si la solicitud es POST
-        if request.method == 'POST':
-            # Obtener el archivo enviado en la solicitud
-            file = request.files['file']
-            filename = file.filename
-            # Verificar si se ha enviado un archivo
-            if filename != '':
-                # Verificar si el archivo ya existe en la carpeta de archivos
-                results = SHOWFILES.upfiles(filename)
-                if results[0]:
-                    # Guardar el archivo en la carpeta de archivos si no existe
-                    file.save(os.path.join(RTFLS, filename))
-                    return jsonify(results[1])  # Devolver resultado exitoso
-                else:
-                    # Devolver un mensaje de error si el archivo ya existe
-                    return jsonify(results[1])
-            else:
-                # Devolver un mensaje si no se ha subido ningun archivo
-                return jsonify('No se ha subido ningun archivo')
-    except Exception as e:
-        # Devolver un mensaje si ocurre un error inesperado
-        return jsonify('Ha ocurrido un error inesperado')
-
-
-
-
-
-
-
-
-
-@app.route("/api/datoseldddwds", methods=['POST'])
-def datoseldddwds():
-    try:
-        # Verificar si la solicitud es POST
-        if request.method == 'POST':
-            # Obtener el archivo enviado en la solicitud
-            file = request.files['file']
-            filename = file.filename
-            # Verificar si se ha enviado un archivo
-            if filename != '':
-                # Verificar si el archivo ya existe en la carpeta de archivos
-                results = SHOWFILES.upfiles(filename)
-                if results[0]:
-                    # Guardar el archivo en la carpeta de archivos si no existe
-                    file.save(os.path.join(RTFLS, filename))
-                    return jsonify(results[1])  # Devolver resultado exitoso
-                else:
-                    # Devolver un mensaje de error si el archivo ya existe
-                    return jsonify(results[1])
-            else:
-                # Devolver un mensaje si no se ha subido ningun archivo
-                return jsonify('No se ha subido ningun archivo')
-    except Exception as e:
-        # Devolver un mensaje si ocurre un error inesperado
-        return jsonify('Ha ocurrido un error inesperado')
-
-
-
-
-
-
-
-
-
-@app.route("/api/datoselddxx", methods=['POST'])
-def datoselddxx():
-    try:
-        # Verificar si la solicitud es POST
-        if request.method == 'POST':
-            # Obtener el archivo enviado en la solicitud
-            file = request.files['file']
-            filename = file.filename
-            # Verificar si se ha enviado un archivo
-            if filename != '':
-                # Verificar si el archivo ya existe en la carpeta de archivos
-                results = SHOWFILES.upfiles(filename)
-                if results[0]:
-                    # Guardar el archivo en la carpeta de archivos si no existe
-                    file.save(os.path.join(RTFLS, filename))
-                    return jsonify(results[1])  # Devolver resultado exitoso
-                else:
-                    # Devolver un mensaje de error si el archivo ya existe
-                    return jsonify(results[1])
-            else:
-                # Devolver un mensaje si no se ha subido ningun archivo
-                return jsonify('No se ha subido ningun archivo')
-    except Exception as e:
-        # Devolver un mensaje si ocurre un error inesperado
-        return jsonify('Ha ocurrido un error inesperado')
 
 
 

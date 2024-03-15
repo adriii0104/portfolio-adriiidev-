@@ -41,4 +41,13 @@ function change() {
     }
 };
 
+var access = document.getElementById('access');
 
+if (access.innerText === 'True') {
+    document.getElementById('form-api').style.display = 'block'
+    document.getElementById('form-email').style.display = 'none'
+    console.log('ready')
+}else{
+    document.getElementById('form-api').style.display = 'none'
+    document.getElementById('form-email').style.display = 'block'
+}

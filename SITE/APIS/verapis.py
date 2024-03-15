@@ -31,9 +31,7 @@ class SHOWFILES:
     @staticmethod
     def upfiles(file:str):
         try:
-            name, ext = os.path.splitext(file)
-
-            route = RTFLS+file
+            _, ext = os.path.splitext(file)
 
             if ext.lower() not in ALLOWED_EXTENSIONS:
                 return False, 'El archivo no es permitido.'
